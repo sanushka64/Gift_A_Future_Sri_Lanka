@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* styles.css */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full height of screen */
+}
+
+.scrollable-content {
+  flex: 1;
+  overflow-y: auto; /* Only content scrolls */
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, #fffa65 0%, transparent 70%),
+              radial-gradient(circle at bottom right, #3498db33 0%, transparent 70%),
+              linear-gradient(135deg, #fefefe, #e8f4fc);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+
+/* Protect Navbar text styles */
+.navbar {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: normal;
+}
+
