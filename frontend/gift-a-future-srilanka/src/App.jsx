@@ -299,7 +299,7 @@ if (activeTab === 'Support A Child') {
           <img
             src={`${import.meta.env.BASE_URL}img/IMG-20250731-WA0148.jpg`}
             alt="Descriptive Alt Text"
-            style={{ width: '120%', height: 'auto', borderRadius: '8px' }}
+            style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
           />
         </div>
 {/* Success Story */}
