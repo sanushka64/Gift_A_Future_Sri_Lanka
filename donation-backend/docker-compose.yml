@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  donation-db:
+    image: mysql:8.0
+    container_name: donation-mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: donation_db
+    ports:
+      - "3307:3306"  # Use 3307 to avoid conflicts with local MySQL
+    volumes:
+      - donation_db_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - donation-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot"]
+      timeout: 20s
+      retries: 10
+    restart: unless-stopped
+
+  # Spring Boot Application
+  donation-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: donation-backend
+    depends_on:
+      donation-db:
+        condition: service_healthy
+    environment:
+      # Database configuration
+      SPRING_DATASOURCE_URL: jdbc:mysql://donation-db:3306/donation_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD:
+
+      # Email configuration (update with your credentials)
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: your-email@gmail.com
+      SPRING_MAIL_PASSWORD: your-app-password
+
+      # JPA configuration
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: false
+
+      # Logging
+      LOGGING_LEVEL_COM_DONATION: INFO
+
+      # Application profile
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "5002:5002"
+    volumes:
+      - app_logs:/app/logs
+    networks:
+      - donation-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/api/donations/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  # Redis for caching (optional)
+  donation-redis:
+    image: redis:7-alpine
+    container_name: donation-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - donation-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+
+  # Nginx reverse proxy (optional)
+  donation-nginx:
+    image: nginx:alpine
+    container_name: donation-nginx
+    depends_on:
+      - donation-app
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/ssl:/etc/nginx/ssl
+    networks:
+      - donation-network
+    restart: unless-stopped
+
+volumes:
+  donation_db_data:
+  redis_data:
+  app_logs:
+
+networks:
+  donation-network:
+    driver: bridge
