@@ -26,15 +26,7 @@ export default function ViewPostedProfiles({ onBack }) {
     },
   ]);
 
-  // ✅ Later, you can uncomment this to fetch from backend
-  /*
-  useEffect(() => {
-    fetch("http://localhost:8080/api/child-profiles")
-      .then(res => res.json())
-      .then(data => setProfiles(data))
-      .catch(err => console.error("Error fetching profiles:", err));
-  }, []);
-  */
+  
 
   return (
     <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px" }}>
