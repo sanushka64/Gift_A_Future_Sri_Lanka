@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  giftafuture-db:
+    image: mysql:8.0
+    container_name: giftafuture-mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: gift-a-future-srilanka
+    ports:
+      - "3308:3306"
+    volumes:
+      - giftafuture_db_data:/var/lib/mysql
+    networks:
+      - giftafuture-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot"]
+      timeout: 20s
+      retries: 10
+    restart: unless-stopped
+
+  # Spring Boot Application
+  giftafuture-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: giftafuture-backend
+    depends_on:
+      giftafuture-db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://giftafuture-db:3306/gift-a-future-srilanka
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: false
+      LOGGING_LEVEL_COM_GIFTAFUTURE: INFO
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "5001:5001"
+    volumes:
+      - app_logs:/app/logs
+    networks:
+      - giftafuture-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+volumes:
+  giftafuture_db_data:
+  app_logs:
+
+networks:
+  giftafuture-network:
+    driver: bridge
