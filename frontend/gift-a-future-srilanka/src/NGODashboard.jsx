@@ -9,6 +9,8 @@ export default function NGODashboard({ user, onTabChange, onSponsorClick, active
   const [totalDonations, setTotalDonations] = useState(0);
   const [showAddChildForm, setShowAddChildForm] = useState(false);
   const [showViewProfiles, setShowViewProfiles] = useState(false);
+  const storedUsername = localStorage.getItem("username");
+
 
   useEffect(() => {
     fetch("http://localhost:8080/api/dashboard/total-posts")
@@ -79,8 +81,11 @@ export default function NGODashboard({ user, onTabChange, onSponsorClick, active
 
       <div style={{ padding: "40px", textAlign: "center" }}>
         <h2 style={{ fontSize: "28px", marginBottom: "20px" }}>
-          Welcome, {user?.username || "NGO User"}! 👋
-        </h2>
+  Welcome, {storedUsername || "NGO User"}! 👋
+
+
+</h2>
+
 
         <div style={{ display: "flex", justifyContent: "center", gap: "100px", marginBottom: "30px" }}>
           <div>
