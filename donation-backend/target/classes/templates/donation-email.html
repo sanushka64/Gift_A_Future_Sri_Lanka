@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f6f9fc; padding: 20px; }
+        .container { background: white; border-radius: 12px; padding: 30px; max-width: 600px; margin: auto; }
+        h2 { color: #2c3e50; }
+        p { font-size: 16px; }
+        .highlight { font-weight: bold; color: #27ae60; }
+        .footer { font-size: 12px; color: gray; margin-top: 20px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Thank You, [[${donation.donorName}]] 🎉</h2>
+    <p>
+        We deeply appreciate your <span class="highlight">[[${donation.donationType}]]</span> donation
+        of <span class="highlight">Rs [[${donation.amount}]]</span>.
+    </p>
+    <p>
+        Your support helps us bring hope, food, and education to children in need across Sri Lanka.
+        A receipt of your contribution is attached to this message.
+    </p>
+    <p>
+        ❤️ From all of us at <b>Gift a Future Sri Lanka</b>, thank you for making a difference!
+    </p>
+    <div class="footer">
+        You agreed to our Privacy Policy and we assure you that your sensitive data is handled ethically and never stored improperly.
+    </div>
+</div>
+</body>
+</html>

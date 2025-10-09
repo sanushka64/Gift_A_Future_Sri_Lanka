@@ -1,0 +1,8 @@
+com\child_profile\child_profile_backend\config\WebConfig.class
+com\child_profile\child_profile_backend\config\AppConfig.class
+com\child_profile\child_profile_backend\controller\ChildProfileController.class
+com\child_profile\child_profile_backend\config\CorsConfig.class
+com\child_profile\child_profile_backend\ChildProfileBackendApplication.class
+com\child_profile\child_profile_backend\model\ChildProfile.class
+com\child_profile\child_profile_backend\service\ChildProfileService.class
+com\child_profile\child_profile_backend\repository\ChildProfileRepository.class
